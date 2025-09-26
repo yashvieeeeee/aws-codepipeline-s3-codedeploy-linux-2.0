@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Interactive Glassmorphism Birthday Cake</title>
+  <title>Interactive Birthday Cake Celebration</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
-    
+
+    /* General styles */
     body {
       background: #121212;
       display: flex;
@@ -18,19 +19,24 @@
       color: #eee;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow: hidden;
+      position: relative;
     }
 
     .glass-container {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
-      padding: 30px 40px;
+      padding: 30px 40px 50px;
       box-shadow: 0 8px 32px 0 rgba(139, 96, 255, 0.4);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       text-align: center;
-      max-width: 280px;
+      max-width: 320px;
       transition: transform 0.3s ease;
+      z-index: 10;
+      position: relative;
+      user-select: none;
     }
 
     .glass-container:hover {
@@ -39,51 +45,93 @@
     }
 
     h2 {
-      margin: 0 0 15px 0;
+      margin: 0 0 25px 0;
       font-weight: 600;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       color: #bb86fc;
       text-shadow: 0 0 6px #bb86fc;
       user-select: none;
     }
 
+    /* Cake container */
     .cake {
       position: relative;
       width: 200px;
       height: 200px;
       margin: 0 auto 10px;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      perspective: 800px;
     }
 
-    .cake:hover {
-      transform: scale(1.08);
-    }
-
-    /* Cake base */
-    .cake-base {
-      width: 200px;
-      height: 120px;
+    /* Cake halves */
+    .cake-half {
+      position: absolute;
+      width: 100px;
+      height: 160px;
+      top: 40px;
       background: #3a3a3a;
-      border-radius: 20px 20px 10px 10px;
+      border-radius: 20px 10px 10px 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.7);
-      position: relative;
-      z-index: 1;
       border: 2px solid #555;
+      transition: transform 0.6s ease;
+      overflow: visible;
+      z-index: 1;
     }
-    /* Cake icing */
-    .icing {
+
+    .cake-half.right {
+      left: 100px;
+      border-radius: 10px 20px 20px 10px;
+    }
+
+    /* Icing halves */
+    .icing-half {
       position: absolute;
       top: 0;
-      left: 0;
-      width: 200px;
+      width: 100px;
       height: 40px;
       background: #bb86fc;
-      border-radius: 20px 20px 0 0;
+      border-radius: 20px 10px 0 0;
       box-shadow: inset 0 4px 6px rgba(255,255,255,0.15);
-      z-index: 2;
       border-bottom: 2px solid #7f39fb;
+      z-index: 2;
     }
+
+    .icing-half.right {
+      border-radius: 10px 20px 0 0;
+      right: 0;
+    }
+
+    /* Sprinkles on each half */
+    .sprinkles {
+      position: absolute;
+      top: 30px;
+      width: 100px;
+      height: 50px;
+      z-index: 3;
+    }
+
+    .sprinkle {
+      position: absolute;
+      width: 8px;
+      height: 3px;
+      border-radius: 2px;
+      transform: rotate(20deg);
+      background: #cf6679;
+      box-shadow: none;
+    }
+
+    /* Sprinkle positions for left half */
+    .left .sprinkle:nth-child(1) { top: 5px; left: 15px; background: #bb86fc; }
+    .left .sprinkle:nth-child(2) { top: 25px; left: 40px; background: #03dac6; }
+    .left .sprinkle:nth-child(3) { top: 15px; left: 70px; background: #ffb74d; }
+    .left .sprinkle:nth-child(4) { top: 40px; left: 60px; background: #cf6679; }
+
+    /* Sprinkle positions for right half */
+    .right .sprinkle:nth-child(1) { top: 5px; left: 20px; background: #bb86fc; }
+    .right .sprinkle:nth-child(2) { top: 35px; left: 30px; background: #03dac6; }
+    .right .sprinkle:nth-child(3) { top: 15px; left: 60px; background: #ffb74d; }
+    .right .sprinkle:nth-child(4) { top: 40px; left: 70px; background: #cf6679; }
+
     /* Candle */
     .candle {
       position: absolute;
@@ -94,10 +142,11 @@
       background: #03dac6;
       border-radius: 4px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.8);
-      z-index: 3;
+      z-index: 4;
       border: 1.5px solid #018786;
       transition: filter 0.3s ease;
     }
+
     /* Flame */
     .flame {
       position: absolute;
@@ -108,7 +157,7 @@
       background: radial-gradient(circle at 50% 40%, #ffb74d 40%, transparent 70%);
       border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
       animation: flicker 1s infinite alternate;
-      z-index: 4;
+      z-index: 5;
       filter: drop-shadow(0 0 4px #ffb74d);
       transition: filter 0.3s ease;
     }
@@ -118,6 +167,20 @@
       filter: drop-shadow(0 0 10px #ffcc33);
     }
 
+    /* Cake halves animation when cut */
+    .cut .cake-half.left {
+      transform: translateX(-60px) rotateY(-20deg);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.9);
+      z-index: 5;
+    }
+
+    .cut .cake-half.right {
+      transform: translateX(60px) rotateY(20deg);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.9);
+      z-index: 5;
+    }
+
+    /* Candle flicker faster on hover */
     @keyframes flicker {
       0% { transform: scale(1) translateY(0); opacity: 1; }
       100% { transform: scale(1.1) translateY(-2px); opacity: 0.8; }
@@ -129,33 +192,161 @@
       100% { transform: scale(1) translateY(0); opacity: 1; }
     }
 
-    /* Sprinkles */
-    .sprinkle {
+    /* Party popper container */
+    .party-popper {
       position: absolute;
-      width: 8px;
-      height: 3px;
-      background: #cf6679;
+      bottom: 0;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, #bb86fc, #3700b3);
+      border-radius: 5px 5px 0 0;
+      box-shadow: 0 0 15px #bb86fc;
+      animation: popper-move 3s ease-in-out infinite;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 6px #bb86fc);
+      user-select: none;
+    }
+
+    .party-popper::before {
+      content: "";
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 30px;
+      background: #bb86fc;
       border-radius: 2px;
-      transform: rotate(20deg);
-      box-shadow:
-        10px 30px #bb86fc,
-        40px 60px #03dac6,
-        60px 20px #ffb74d,
-        140px 50px #bb86fc;
+    }
+
+    .party-popper:nth-child(2) {
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    .party-popper:nth-child(3) {
+      left: 90%;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes popper-move {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      50% { transform: translateY(-15px) rotate(10deg); opacity: 1; }
+    }
+
+    /* Balloons */
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 40px;
+      height: 55px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.5));
+      animation: floatUp linear infinite;
+      cursor: default;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 20px;
+      background: #444;
+      border-radius: 1px;
+    }
+
+    .balloon.red {
+      background: #cf6679;
+      left: 10%;
+      animation-duration: 10s;
+      animation-delay: 0s;
+    }
+
+    .balloon.purple {
+      background: #bb86fc;
+      left: 40%;
+      animation-duration: 12s;
+      animation-delay: 3s;
+    }
+
+    .balloon.teal {
+      background: #03dac6;
+      left: 70%;
+      animation-duration: 11s;
+      animation-delay: 5s;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.85;
+      }
+      100% {
+        transform: translateY(-110vh) translateX(20px);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
   <div class="glass-container" aria-label="Birthday Cake and Greeting">
     <h2>Happy Birthday Yashvie</h2>
-    <div class="cake" role="img" aria-label="Birthday cake with candle">
-      <div class="icing"></div>
-      <div class="cake-base"></div>
-      <div class="sprinkle"></div>
+    <div class="cake" role="img" aria-label="Birthday cake with candle" tabindex="0" aria-pressed="false" title="Click cake to cut it!">
+      <div class="cake-half left">
+        <div class="icing-half left"></div>
+        <div class="sprinkles left">
+          <div class="sprinkle"></div>
+          <div class="sprinkle"></div>
+          <div class="sprinkle"></div>
+          <div class="sprinkle"></div>
+        </div>
+      </div>
+      <div class="cake-half right">
+        <div class="icing-half right"></div>
+        <div class="sprinkles right">
+          <div class="sprinkle"></div>
+          <div class="sprinkle"></div>
+          <div class="sprinkle"></div>
+          <div class="sprinkle"></div>
+        </div>
+      </div>
       <div class="candle">
         <div class="flame"></div>
       </div>
     </div>
   </div>
+
+  <!-- Party poppers -->
+  <div class="party-popper"></div>
+  <div class="party-popper"></div>
+
+  <!-- Balloons -->
+  <div class="balloon red"></div>
+  <div class="balloon purple"></div>
+  <div class="balloon teal"></div>
+
+  <script>
+    const cake = document.querySelector('.cake');
+
+    cake.addEventListener('click', () => {
+      cake.classList.toggle('cut');
+
+      // Update aria-pressed attribute for accessibility
+      const pressed = cake.getAttribute('aria-pressed') === 'true';
+      cake.setAttribute('aria-pressed', String(!pressed));
+    });
+
+    // Optional: allow keyboard interaction (Enter/Space) to toggle cut
+    cake.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        cake.click();
+      }
+    });
+  </script>
 </body>
 </html>
