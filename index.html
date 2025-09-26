@@ -1,37 +1,94 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Sample Deployment</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple Birthday Cake</title>
   <style>
     body {
-      color: #ffffff;
-      background-color: #0000ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #fce4ec;
+      margin: 0;
       font-family: Arial, sans-serif;
-      font-size: 16px;
     }
-    
-    h1 {
-      font-size: 500%;
-      font-weight: normal;
-      margin-bottom: 0;
+    .cake {
+      position: relative;
+      width: 200px;
+      height: 200px;
     }
-    
-    h2 {
-      font-size: 200%;
-      font-weight: normal;
-      margin-bottom: 0;
+    /* Cake base */
+    .cake-base {
+      width: 200px;
+      height: 120px;
+      background: #ffcc80;
+      border-radius: 20px 20px 10px 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+    }
+    /* Cake icing */
+    .icing {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 40px;
+      background: #f48fb1;
+      border-radius: 20px 20px 0 0;
+      box-shadow: inset 0 4px 6px rgba(255,255,255,0.6);
+      z-index: 2;
+    }
+    /* Candle */
+    .candle {
+      position: absolute;
+      top: -50px;
+      left: 90px;
+      width: 20px;
+      height: 50px;
+      background: #81d4fa;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      z-index: 3;
+    }
+    /* Flame */
+    .flame {
+      position: absolute;
+      top: -25px;
+      left: 4px;
+      width: 12px;
+      height: 20px;
+      background: radial-gradient(circle at 50% 40%, #ffeb3b 40%, transparent 70%);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: flicker 1s infinite alternate;
+      z-index: 4;
+    }
+    @keyframes flicker {
+      0% { transform: scale(1) translateY(0); opacity: 1; }
+      100% { transform: scale(1.1) translateY(-2px); opacity: 0.8; }
+    }
+    /* Sprinkles */
+    .sprinkle {
+      position: absolute;
+      width: 8px;
+      height: 3px;
+      background: #f06292;
+      border-radius: 2px;
+      transform: rotate(20deg);
+      box-shadow: 10px 30px #ba68c8, 40px 60px #4db6ac, 60px 20px #ffd54f, 140px 50px #9575cd;
     }
   </style>
 </head>
 <body>
-  <div align="center">
-    <h1>Congratulations!</h1>
-    <h2>You have successfully created a pipeline that retrieved this source application from an Amazon S3 bucket and deployed it 
-	to three Amazon EC2 instances using AWS CodeDeploy.</h2>
-    <p>For next steps, read the AWS CodePipeline Documentation. Incedge 2020</p>
+  <div class="cake">
+    <div class="icing"></div>
+    <div class="cake-base"></div>
+    <div class="sprinkle"></div>
+    <div class="candle">
+      <div class="flame"></div>
+    </div>
   </div>
 </body>
 </html>
-
