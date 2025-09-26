@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dark Theme Birthday Cake</title>
+  <title>Interactive Glassmorphism Birthday Cake</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+    
     body {
       background: #121212;
       display: flex;
@@ -12,14 +14,52 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', sans-serif;
       color: #eee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
+    .glass-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 32px 0 rgba(139, 96, 255, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      text-align: center;
+      max-width: 280px;
+      transition: transform 0.3s ease;
+    }
+
+    .glass-container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 48px 0 rgba(139, 96, 255, 0.7);
+    }
+
+    h2 {
+      margin: 0 0 15px 0;
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #bb86fc;
+      text-shadow: 0 0 6px #bb86fc;
+      user-select: none;
+    }
+
     .cake {
       position: relative;
       width: 200px;
       height: 200px;
+      margin: 0 auto 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
+
+    .cake:hover {
+      transform: scale(1.08);
+    }
+
     /* Cake base */
     .cake-base {
       width: 200px;
@@ -56,6 +96,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.8);
       z-index: 3;
       border: 1.5px solid #018786;
+      transition: filter 0.3s ease;
     }
     /* Flame */
     .flame {
@@ -69,11 +110,25 @@
       animation: flicker 1s infinite alternate;
       z-index: 4;
       filter: drop-shadow(0 0 4px #ffb74d);
+      transition: filter 0.3s ease;
     }
+
+    .cake:hover .flame {
+      animation: flicker-fast 0.4s infinite alternate;
+      filter: drop-shadow(0 0 10px #ffcc33);
+    }
+
     @keyframes flicker {
       0% { transform: scale(1) translateY(0); opacity: 1; }
       100% { transform: scale(1.1) translateY(-2px); opacity: 0.8; }
     }
+
+    @keyframes flicker-fast {
+      0% { transform: scale(1) translateY(0); opacity: 1; }
+      50% { transform: scale(1.15) translateY(-3px); opacity: 0.7; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
     /* Sprinkles */
     .sprinkle {
       position: absolute;
@@ -91,12 +146,15 @@
   </style>
 </head>
 <body>
-  <div class="cake">
-    <div class="icing"></div>
-    <div class="cake-base"></div>
-    <div class="sprinkle"></div>
-    <div class="candle">
-      <div class="flame"></div>
+  <div class="glass-container" aria-label="Birthday Cake and Greeting">
+    <h2>Happy Birthday Yashvie</h2>
+    <div class="cake" role="img" aria-label="Birthday cake with candle">
+      <div class="icing"></div>
+      <div class="cake-base"></div>
+      <div class="sprinkle"></div>
+      <div class="candle">
+        <div class="flame"></div>
+      </div>
     </div>
   </div>
 </body>
